@@ -10,6 +10,12 @@
 > - **Reines Hobbyprojekt – frei nutzbar, änderbar & verbreitbar:** Dieses Projekt entsteht ausschließlich aus reinem Hobby und Interesse am gemeinsamen Funk-/SDR-Hobby. Es steht ausdrücklich frei zur Verfügung und darf frei genutzt, weiterverbreitet, verändert und verbessert werden.
 <!-- DNX-DISCLAIMER-END -->
 
+<!-- DNX-PREVIEW-START -->
+## Live-Vorschau
+
+![Live-Vorschau — DNX CB Funkgeraete Remote](docs/preview.png)
+<!-- DNX-PREVIEW-END -->
+
 Drei voll bedienbare, markenfreie CB-Funkgeräte als schwebende Fernsteuerung direkt über dem OpenWebRX- / OpenWebRX+-Empfänger — **komplett mit allen hochauflösenden Frontplatten-Grafiken** in einem Paket.
 
 ## Inhalt des Pakets
