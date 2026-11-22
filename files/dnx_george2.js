@@ -1,5 +1,5 @@
 /* =========================================================================
-   DNX CB-Funkgeraete (v9.12) - Funkgeraet 1 + Funkgeraet 2 + Funkgeraet 3 (markenfrei)
+   DNX CB-Funkgeraete (v9.13) - Funkgeraet 1 + Funkgeraet 2 + Funkgeraet 3 (markenfrei)
    -------------------------------------------------------------------------
    Eigene Datei, haengt an keinem anderen Plugin. Es benutzt nur, was
    OpenWebRX selbst mitbringt:
@@ -968,16 +968,31 @@
     return ng;
   }
 
+  function txtSetzen(node, val) {
+    if (!node) return;
+    var s = String(val);
+    if (node.textContent !== s) node.textContent = s;
+  }
+
   var _modPrev = 0, _modGlatt = 0;
   function ae8NadelZeichnen(rohAnteil) {
     if (!zustand.power) {
-      if (el.m1Nadel) el.m1Nadel.setAttribute("transform", "rotate(-44, 110, 142)");
-      if (el.m2Nadel) el.m2Nadel.setAttribute("transform", "rotate(-44, 110, 142)");
+      if (el.m1Nadel && el.m1Nadel._deg !== -44) {
+        el.m1Nadel._deg = -44;
+        el.m1Nadel.setAttribute("transform", "rotate(-44, 110, 142)");
+      }
+      if (el.m2Nadel && el.m2Nadel._deg !== -44) {
+        el.m2Nadel._deg = -44;
+        el.m2Nadel.setAttribute("transform", "rotate(-44, 110, 142)");
+      }
       return;
     }
     var a1 = (rohAnteil === null || !isFinite(rohAnteil)) ? 0 : smGlaetten(0, rohAnteil);
-    var g1 = -44 + Math.max(0, Math.min(1, a1)) * 88;
-    if (el.m1Nadel) el.m1Nadel.setAttribute("transform", "rotate(" + g1.toFixed(1) + ", 110, 142)");
+    var g1 = Math.round((-44 + Math.max(0, Math.min(1, a1)) * 88) * 10) / 10;
+    if (el.m1Nadel && el.m1Nadel._deg !== g1) {
+      el.m1Nadel._deg = g1;
+      el.m1Nadel.setAttribute("transform", "rotate(" + g1.toFixed(1) + ", 110, 142)");
+    }
 
     var a2 = 0;
     if (zustand.swrMode === "cal") {
@@ -996,8 +1011,11 @@
       _modGlatt += (ziel2 - _modGlatt) * k2;
       a2 = _modGlatt;
     }
-    var g2 = -44 + Math.max(0, Math.min(1, a2)) * 88;
-    if (el.m2Nadel) el.m2Nadel.setAttribute("transform", "rotate(" + g2.toFixed(1) + ", 110, 142)");
+    var g2 = Math.round((-44 + Math.max(0, Math.min(1, a2)) * 88) * 10) / 10;
+    if (el.m2Nadel && el.m2Nadel._deg !== g2) {
+      el.m2Nadel._deg = g2;
+      el.m2Nadel.setAttribute("transform", "rotate(" + g2.toFixed(1) + ", 110, 142)");
+    }
   }
 
   var el = {};
@@ -1316,8 +1334,9 @@
       "#" + KENNUNG + "{position:fixed !important;left:14px;bottom:44px;",
       " z-index:2147483100 !important;width:680px;font-family:system-ui,sans-serif !important;user-select:none !important;overflow:visible !important;}",
       "#" + KENNUNG + " .g2-geraet{position:relative !important;border:none !important;border-radius:14px !important;",
-      " overflow:visible !important;isolation:isolate !important;filter:drop-shadow(0 14px 28px rgba(0,0,0,.80)) !important;}",
-      "#" + KENNUNG + " .g2-geraet > img{display:block !important;width:100% !important;height:auto !important;aspect-ratio:1440/449 !important;user-select:none !important;border-radius:12px !important;}",
+      " overflow:visible !important;isolation:isolate !important;}",
+      "#" + KENNUNG + " .g2-geraet > img{display:block !important;width:100% !important;height:auto !important;aspect-ratio:1440/449 !important;user-select:none !important;border-radius:12px !important;",
+      " transform:translateZ(0) !important;backface-visibility:hidden !important;filter:drop-shadow(0 14px 28px rgba(0,0,0,.80)) !important;}",
       "#" + KENNUNG + " .ae8-led{position:absolute !important;z-index:5 !important;pointer-events:none !important;display:flex !important;align-items:center !important;justify-content:center !important;}",
       "#" + KENNUNG + " .ae8-led i{display:block !important;width:calc(5.8px * var(--g2-skala,1)) !important;height:calc(5.8px * var(--g2-skala,1)) !important;border-radius:50% !important;",
       " background:radial-gradient(circle at 38% 35%,#ff968a 0%,#eb1c18 55%,#7c0503 100%) !important;",
@@ -1336,8 +1355,9 @@
       " font:700 calc(8.8px * var(--g2-skala,1))/1 system-ui,sans-serif !important;letter-spacing:.09em !important;",
       " color:rgba(242,245,250,.94) !important;text-shadow:0 1px 2px #000 !important;}",
       "#" + KENNUNG + " .ae8-meter{position:absolute !important;z-index:5 !important;border-radius:3px !important;overflow:hidden !important;cursor:pointer !important;",
-      " box-shadow:inset 0 2px 7px rgba(0,0,0,.55),inset 0 0 0 1px rgba(24,18,12,.7) !important;transition:filter .2s !important;}",
-      "#" + KENNUNG + " .ae8-meter-licht{position:absolute !important;inset:0 !important;pointer-events:none !important;transition:background .25s,opacity .25s !important;}",
+      " isolation:isolate !important;contain:layout paint style !important;transform:translateZ(0) !important;backface-visibility:hidden !important;",
+      " background-color:#e9cd9d !important;box-shadow:inset 0 2px 7px rgba(0,0,0,.55),inset 0 0 0 1px rgba(24,18,12,.7) !important;}",
+      "#" + KENNUNG + " .ae8-meter-licht{position:absolute !important;inset:0 !important;pointer-events:none !important;}",
       "#" + KENNUNG + " .ae8-meter svg{position:relative !important;z-index:2 !important;width:100% !important;height:100% !important;display:block !important;}",
       "#" + KENNUNG + " .ae8-meter::after{content:'' !important;position:absolute !important;inset:0 !important;z-index:3 !important;pointer-events:none !important;",
       " background:linear-gradient(128deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,.04) 33%,transparent 36%) !important;}",
@@ -1345,10 +1365,10 @@
       "#" + KENNUNG + " .g2-lcd-klick{position:absolute !important;z-index:7 !important;background:transparent !important;cursor:pointer !important;border-radius:4px !important;}",
       "#" + KENNUNG + " .g2-lcd-klick:active{background:rgba(255,255,255,.05) !important;}",
       "#" + KENNUNG + " .g2-lcd{position:absolute !important;z-index:5 !important;border-radius:4px !important;overflow:hidden !important;pointer-events:none !important;",
+      " isolation:isolate !important;contain:layout paint style !important;transform:translateZ(0) !important;backface-visibility:hidden !important;",
       " background-color:#f4b25c !important;",
       " background-image:radial-gradient(ellipse at 50% 44%,rgba(255,255,255,.28) 0%,rgba(0,0,0,.08) 68%,rgba(0,0,0,.38) 100%) !important;",
-      " box-shadow:inset 0 3px 10px rgba(0,0,0,.78),inset 0 0 18px rgba(0,0,0,.35),inset 0 0 0 1.5px rgba(10,8,6,.85) !important;",
-      " transition:filter .2s !important;}",
+      " box-shadow:inset 0 3px 10px rgba(0,0,0,.78),inset 0 0 18px rgba(0,0,0,.35),inset 0 0 0 1.5px rgba(10,8,6,.85) !important;}",
       "#" + KENNUNG + " .g2-lcd::after{content:'' !important;position:absolute !important;inset:0 !important;pointer-events:none !important;z-index:6 !important;",
       " background:linear-gradient(125deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,.05) 30%,transparent 32%) !important;}",
       "#" + KENNUNG + ".standby .g2-lcd{filter:brightness(.18) saturate(.3) !important;}",
@@ -1369,12 +1389,12 @@
       "#" + KENNUNG + " .ae8-flg.f-lock{right:17%;top:7%;}",
       "#" + KENNUNG + " .g2-status{left:55.8% !important;top:39.2% !important;width:25.2% !important;height:3.8% !important;justify-content:flex-start !important;overflow:hidden !important;}",
       "#" + KENNUNG + " .g2-status span{font:700 calc(7.1px * var(--g2-skala,1))/1 'Courier New',monospace !important;color:#120a03 !important;opacity:.82 !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;}",
-      "#" + KENNUNG + " .g2-seg{position:relative !important;display:flex !important;align-items:flex-end !important;gap:calc(2.4px * var(--g2-skala,1)) !important;filter:drop-shadow(1px 1.2px 0 rgba(0,0,0,.22)) !important;}",
+      "#" + KENNUNG + " .g2-seg{position:relative !important;display:flex !important;align-items:flex-end !important;gap:calc(2.4px * var(--g2-skala,1)) !important;}",
       "#" + KENNUNG + " .g2-seg .z{position:relative !important;display:block !important;width:calc(12.2px * var(--g2-skala,1)) !important;height:calc(23px * var(--g2-skala,1)) !important;flex:0 0 auto !important;transform:skewX(-5deg) !important;}",
       "#" + KENNUNG + " .g2-seg.big .z{width:calc(15.5px * var(--g2-skala,1)) !important;height:calc(30px * var(--g2-skala,1)) !important;}",
       "#" + KENNUNG + " .g2-seg.big{gap:calc(3.5px * var(--g2-skala,1)) !important;}",
       "#" + KENNUNG + " .g2-seg .z i{position:absolute !important;display:block !important;background:rgba(18,10,3,.065) !important;border-radius:1px !important;}",
-      "#" + KENNUNG + " .g2-seg .z i.on{background:#120a03 !important;box-shadow:0 0 1px rgba(18,10,3,.35) !important;}",
+      "#" + KENNUNG + " .g2-seg .z i.on{background:#120a03 !important;box-shadow:1px 1.2px 0 rgba(0,0,0,.22),0 0 1px rgba(18,10,3,.35) !important;}",
       "#" + KENNUNG + " .g2-seg .z i.a{top:0;left:calc(2.1px * var(--g2-skala,1));right:calc(2.1px * var(--g2-skala,1));height:calc(2.5px * var(--g2-skala,1));}",
       "#" + KENNUNG + " .g2-seg .z i.d{bottom:0;left:calc(2.1px * var(--g2-skala,1));right:calc(2.1px * var(--g2-skala,1));height:calc(2.5px * var(--g2-skala,1));}",
       "#" + KENNUNG + " .g2-seg .z i.g{top:calc(10.25px * var(--g2-skala,1));left:calc(2.1px * var(--g2-skala,1));right:calc(2.1px * var(--g2-skala,1));height:calc(2.5px * var(--g2-skala,1));}",
@@ -1390,7 +1410,7 @@
       "#" + KENNUNG + " .g2-seg.big .z i.e{bottom:calc(2.6px * var(--g2-skala,1));width:calc(3.3px * var(--g2-skala,1));height:calc(10.5px * var(--g2-skala,1));}",
       "#" + KENNUNG + " .g2-seg.big .z i.c{bottom:calc(2.6px * var(--g2-skala,1));width:calc(3.3px * var(--g2-skala,1));height:calc(10.5px * var(--g2-skala,1));}",
       "#" + KENNUNG + " .g2-seg .k{position:relative !important;display:block !important;width:calc(4px * var(--g2-skala,1)) !important;height:calc(23px * var(--g2-skala,1)) !important;flex:0 0 auto !important;}",
-      "#" + KENNUNG + " .g2-seg .k i{position:absolute !important;left:calc(.7px * var(--g2-skala,1));bottom:0;width:calc(2.6px * var(--g2-skala,1));height:calc(3.2px * var(--g2-skala,1));background:#120a03 !important;border-radius:1px !important;}",
+      "#" + KENNUNG + " .g2-seg .k i{position:absolute !important;left:calc(.7px * var(--g2-skala,1));bottom:0;width:calc(2.6px * var(--g2-skala,1));height:calc(3.2px * var(--g2-skala,1));background:#120a03 !important;border-radius:1px !important;box-shadow:1px 1.2px 0 rgba(0,0,0,.22) !important;}",
       "#" + KENNUNG + " .g2-knopf{position:absolute !important;z-index:6 !important;border-radius:50% !important;",
       " touch-action:none !important;cursor:" + HAND_AUF + " !important;}",
       "#" + KENNUNG + " .g2-knopf.greift{cursor:" + HAND_ZU + " !important;}",
@@ -1956,9 +1976,12 @@
     function ae8MenueSync() {
       if (bNb) bNb.classList.toggle("an", afRead("NB"));
       if (bNr) bNr.classList.toggle("an", afRead("NR"));
-      if (bLk) { bLk.classList.toggle("an", !!zustand.lock); bLk.textContent = "LOCK: " + (zustand.lock ? "EIN" : "AUS"); }
-      if (bKl) { bKl.classList.toggle("an", !!_klickAn); bKl.textContent = "Klick-Ton: " + (_klickAn ? "EIN" : "AUS"); }
-      if (sRand && document.activeElement !== sRand) { sRand.value = zustand.rand; if (bRandLbl) bRandLbl.textContent = "+" + zustand.rand; }
+      if (bLk) { bLk.classList.toggle("an", !!zustand.lock); txtSetzen(bLk, "LOCK: " + (zustand.lock ? "EIN" : "AUS")); }
+      if (bKl) { bKl.classList.toggle("an", !!_klickAn); txtSetzen(bKl, "Klick-Ton: " + (_klickAn ? "EIN" : "AUS")); }
+      if (sRand && document.activeElement !== sRand) {
+        if (String(sRand.value) !== String(zustand.rand)) sRand.value = zustand.rand;
+        if (bRandLbl) txtSetzen(bRandLbl, "+" + zustand.rand);
+      }
     }
     el.ae8MenueSync = ae8MenueSync;
     qm('[data-m="lcd"]').addEventListener("click", function () { g2Klick("taste"); lcdDreh(1); });
@@ -2707,7 +2730,7 @@
       "#" + KENNUNG2 + " .ae-kasten{position:relative !important;width:560px !important;transform-origin:top left !important;overflow:visible !important;}",
       "#" + KENNUNG2 + " .ae-geraet{position:relative !important;width:100% !important;isolation:isolate !important;}",
       "#" + KENNUNG2 + " .ae-geraet > img{display:block !important;width:100% !important;height:auto !important;aspect-ratio:1440/468 !important;user-select:none !important;pointer-events:auto !important;",
-      " filter:drop-shadow(0 16px 32px rgba(0,0,0,.85)) !important;}",
+      " transform:translateZ(0) !important;backface-visibility:hidden !important;filter:drop-shadow(0 16px 32px rgba(0,0,0,.85)) !important;}",
       /* Power-Kippschalter rote Glimm-Linse & Status-LEDs (RX/TX gruen, ANT 1 rot, ANT 2 rot) */
       "#" + KENNUNG2 + " .ae-pwr-lens{position:absolute !important;z-index:4 !important;pointer-events:none !important;border-radius:2px !important;",
       " background:radial-gradient(ellipse at 50% 45%,#ff7a6b 0%,#e61e16 58%,#780804 100%) !important;",
@@ -2738,11 +2761,10 @@
       "#" + KENNUNG2 + " .ae-dreh-cv.greift{cursor:" + HAND_ZU2 + " !important;}",
       /* Panoramisches Stabo XF 9082 LCD-Fenster (Alle Groessen fest auf ae-kasten 560x182 skaliert!) */
       "#" + KENNUNG2 + " .ae-display{position:absolute !important;z-index:5 !important;border-radius:3px !important;cursor:pointer !important;",
-      " isolation:isolate !important;contain:layout paint style !important;transform:translateZ(0) !important;overflow:hidden !important;",
+      " isolation:isolate !important;contain:layout paint style !important;transform:translateZ(0) !important;backface-visibility:hidden !important;overflow:hidden !important;",
       " background-color:var(--ae-lcd,#ff9b12) !important;",
       " background-image:radial-gradient(ellipse at 50% 45%,rgba(255,255,255,.26) 0%,rgba(0,0,0,.06) 66%,rgba(0,0,0,.34) 100%) !important;",
-      " box-shadow:inset 0 3px 10px rgba(0,0,0,.82),inset 0 0 18px rgba(0,0,0,.35),inset 0 0 0 1.5px rgba(8,8,10,.92) !important;",
-      " transition:filter .2s,background-color .22s !important;}",
+      " box-shadow:inset 0 3px 10px rgba(0,0,0,.82),inset 0 0 18px rgba(0,0,0,.35),inset 0 0 0 1.5px rgba(8,8,10,.92) !important;}",
       "#" + KENNUNG2 + ".dim .ae-display{filter:brightness(.58) contrast(1.06) !important;}",
       "#" + KENNUNG2 + ".standby .ae-display{filter:brightness(.19) saturate(.24) !important;}",
       "#" + KENNUNG2 + " .ae-display::after{content:'' !important;position:absolute !important;inset:0 !important;pointer-events:none !important;z-index:8 !important;",
@@ -2757,7 +2779,7 @@
       "#" + KENNUNG2 + " .ae-busy{position:absolute !important;left:2px !important;bottom:2px !important;",
       " padding:1px 3.5px !important;border-radius:1.5px !important;",
       " font:900 6.5px/1.05 system-ui,sans-serif !important;letter-spacing:.05em !important;",
-      " background:rgba(20,14,4,.09) !important;color:rgba(20,14,4,.18) !important;transition:all .10s !important;}",
+      " background:rgba(20,14,4,.09) !important;color:rgba(20,14,4,.18) !important;}",
       "#" + KENNUNG2 + " .ae-busy.an{background:#140e04 !important;color:var(--ae-lcd,#ff9b12) !important;box-shadow:0 0 2px rgba(0,0,0,.28) !important;}",
       /* Mittleres Feld im LCD: Mode, Status-Flags, 7-Segment Frequenz + BEEP / MHz + Statuszeile */
       "#" + KENNUNG2 + " .ae-lcd-mitte{position:relative !important;display:flex !important;flex-direction:column !important;justify-content:space-between !important;min-width:0 !important;padding:1px 0 !important;}",
@@ -2779,12 +2801,12 @@
       "#" + KENNUNG2 + " .ae-ch-row{display:flex !important;align-items:flex-start !important;gap:3px !important;}",
       "#" + KENNUNG2 + " .ae-ch-lbl{font:800 7.4px/1 system-ui,sans-serif !important;color:#140e04 !important;margin-top:2px !important;}",
       /* Schlanke geneigte Stabo-7-Segment-Ziffern (exakt bemessen fuer 56px LCD-Innenhoehe) */
-      "#" + KENNUNG2 + " .ae-seg{position:relative !important;display:flex !important;align-items:flex-end !important;gap:2.4px !important;filter:drop-shadow(.8px .8px 0 rgba(0,0,0,.18)) !important;}",
+      "#" + KENNUNG2 + " .ae-seg{position:relative !important;display:flex !important;align-items:flex-end !important;gap:2.4px !important;}",
       "#" + KENNUNG2 + " .ae-seg .z{position:relative !important;display:block !important;width:11.6px !important;height:25px !important;flex:0 0 auto !important;transform:skewX(-7deg) !important;}",
       "#" + KENNUNG2 + " .ae-seg.big .z{width:14.4px !important;height:31px !important;}",
       "#" + KENNUNG2 + " .ae-seg.big{gap:3.2px !important;}",
       "#" + KENNUNG2 + " .ae-seg .z i{position:absolute !important;display:block !important;background:rgba(20,14,4,.075) !important;border-radius:1px !important;}",
-      "#" + KENNUNG2 + " .ae-seg .z i.on{background:#140e04 !important;box-shadow:0 0 1px rgba(20,14,4,.28) !important;}",
+      "#" + KENNUNG2 + " .ae-seg .z i.on{background:#140e04 !important;box-shadow:.8px .8px 0 rgba(0,0,0,.18),0 0 1px rgba(20,14,4,.28) !important;}",
       "#" + KENNUNG2 + " .ae-seg .z i.a{top:0;left:2.0px;right:2.0px;height:2.4px;}",
       "#" + KENNUNG2 + " .ae-seg .z i.d{bottom:0;left:2.0px;right:2.0px;height:2.4px;}",
       "#" + KENNUNG2 + " .ae-seg .z i.g{top:11.3px;left:2.0px;right:2.0px;height:2.4px;}",
@@ -2800,7 +2822,7 @@
       "#" + KENNUNG2 + " .ae-seg.big .z i.e{bottom:2.4px;width:3.0px;height:11.4px;}",
       "#" + KENNUNG2 + " .ae-seg.big .z i.c{bottom:2.4px;width:3.0px;height:11.4px;}",
       "#" + KENNUNG2 + " .ae-seg .k{position:relative !important;display:block !important;width:4px !important;height:25px !important;flex:0 0 auto !important;}",
-      "#" + KENNUNG2 + " .ae-seg .k i{position:absolute !important;left:.6px;bottom:0;width:2.6px;height:3.2px;background:#140e04 !important;border-radius:1px !important;}",
+      "#" + KENNUNG2 + " .ae-seg .k i{position:absolute !important;left:.6px;bottom:0;width:2.6px;height:3.2px;background:#140e04 !important;border-radius:1px !important;box-shadow:.8px .8px 0 rgba(0,0,0,.18) !important;}",
       "#" + KENNUNG2 + " .g2-sr{position:absolute !important;width:1px !important;height:1px !important;overflow:hidden !important;opacity:0 !important;pointer-events:none !important;}",
       /* Rahmen-Griffe, Menue, Wechsel & Ecken */
       "#" + KENNUNG2 + " .ae-griff{position:absolute !important;z-index:20 !important;opacity:.28 !important;transition:opacity .15s linear !important;}",
@@ -3996,7 +4018,7 @@
     var bandTxt = z.mm ? ("M" + ((z.memIdx || 0) + 1)) : (z.kanal === 9 || z.kanal === 19 ? "EMG" : "C");
     if (el.aeBand && el.aeBand.textContent !== bandTxt) el.aeBand.textContent = bandTxt;
     if (el.aeBeep) el.aeBeep.classList.toggle("an", !!_klickAn);
-    if (el.aePwrLbl) el.aePwrLbl.textContent = z.swrAn ? "SWR" : "PWR";
+    txtSetzen(el.aePwrLbl, z.swrAn ? "SWR" : "PWR");
 
     if (el.aeLeds) {
       el.aeLeds.rx.classList.toggle("an", !!z.power);
@@ -4051,10 +4073,10 @@
     try {
       var sV = w.querySelector('[data-m="vol"]'), sS = w.querySelector('[data-m="sq"]');
       var sR = w.querySelector('[data-m="rf"]'),  sC = w.querySelector('[data-m="rit"]');
-      if (sV && document.activeElement !== sV) { sV.value = z.laut; el.aeMVol.textContent = z.laut; }
-      if (sS && document.activeElement !== sS) { sS.value = z.sq;   el.aeMSq.textContent  = z.sq; }
-      if (sR && document.activeElement !== sR) { sR.value = z.rf;   el.aeMRf.textContent  = (RF_STATE.modus === "auto" ? "AGC" : z.rf); }
-      if (sC && document.activeElement !== sC) { sC.value = z.rit;  el.aeMRit.textContent = (z.rit > 0 ? "+" : "") + z.rit; }
+      if (sV && document.activeElement !== sV) { if (String(sV.value) !== String(z.laut)) sV.value = z.laut; txtSetzen(el.aeMVol, z.laut); }
+      if (sS && document.activeElement !== sS) { if (String(sS.value) !== String(z.sq)) sS.value = z.sq; txtSetzen(el.aeMSq, z.sq); }
+      if (sR && document.activeElement !== sR) { if (String(sR.value) !== String(z.rf)) sR.value = z.rf; txtSetzen(el.aeMRf, RF_STATE.modus === "auto" ? "AGC" : z.rf); }
+      if (sC && document.activeElement !== sC) { if (String(sC.value) !== String(z.rit)) sC.value = z.rit; txtSetzen(el.aeMRit, (z.rit > 0 ? "+" : "") + z.rit); }
       var bAmb = w.querySelector('[data-m="amber"]'), bBlau = w.querySelector('[data-m="blau"]');
       if (bAmb)  bAmb.classList.toggle("an", aeFarbeId() === "bernstein");
       if (bBlau) bBlau.classList.toggle("an", aeFarbeId() === "blau");
@@ -4099,7 +4121,7 @@
 
   /* Farbdrehungen bezogen auf das originale Smaragd-Gruen (~145 Grad) */
   var P3_LICHT_FILTER = {
-    gruen:     "hue-rotate(0deg)",
+    gruen:     "none",
     tuerkis:   "hue-rotate(38deg) saturate(1.15)",
     blau:      "hue-rotate(85deg) saturate(1.25)",
     violett:   "hue-rotate(138deg) saturate(1.2)",
@@ -4396,8 +4418,11 @@
     var nadel = el.p3Nadel;
     if (!nadel) return;
     var anteil = !z.power ? 0 : ((rohAnteil === null || !isFinite(rohAnteil)) ? 0 : smGlaetten(2, rohAnteil));
-    var grad = -43 + Math.max(0, Math.min(1, anteil)) * 86;
-    nadel.setAttribute("transform", "rotate(" + grad.toFixed(1) + ", 110, 146)");
+    var grad = Math.round((-43 + Math.max(0, Math.min(1, anteil)) * 86) * 10) / 10;
+    if (nadel._deg !== grad) {
+      nadel._deg = grad;
+      nadel.setAttribute("transform", "rotate(" + grad.toFixed(1) + ", 110, 146)");
+    }
   }
 
   function p3MeterSvgBauen(box) {
@@ -4495,7 +4520,7 @@
       "#" + KENNUNG3 + " .p3-kasten{position:relative !important;width:560px !important;transform-origin:top left !important;overflow:visible !important;}",
       "#" + KENNUNG3 + " .p3-geraet{position:relative !important;width:100% !important;isolation:isolate !important;}",
       "#" + KENNUNG3 + " .p3-geraet > img{display:block !important;width:100% !important;height:auto !important;aspect-ratio:1280/476 !important;user-select:none !important;pointer-events:auto !important;",
-      " filter:drop-shadow(0 18px 36px rgba(0,0,0,.88)) !important;}",
+      " transform:translateZ(0) !important;backface-visibility:hidden !important;filter:drop-shadow(0 18px 36px rgba(0,0,0,.88)) !important;}",
       /* LED Status-Matrix oben Mitte-Links */
       "#" + KENNUNG3 + " .p3-led-bay{position:absolute !important;z-index:5 !important;display:grid !important;",
       " grid-template-columns:1fr 1fr !important;grid-template-rows:repeat(4,1fr) !important;",
@@ -4516,8 +4541,10 @@
       "#" + KENNUNG3 + ".standby .p3-led-item .p3-led-lbl{color:rgba(150,160,170,.35) !important;}",
       /* Analoges S-Meter Fenster */
       "#" + KENNUNG3 + " .p3-meter{position:absolute !important;z-index:5 !important;cursor:pointer !important;overflow:hidden !important;",
-      " border-radius:2px !important;box-shadow:inset 0 2px 8px rgba(0,0,0,.45) !important;transition:filter .2s !important;}",
-      "#" + KENNUNG3 + " .p3-meter-licht{position:absolute !important;inset:0 !important;pointer-events:none !important;transition:background .25s,opacity .25s !important;}",
+      " isolation:isolate !important;contain:layout paint style !important;transform:translateZ(0) !important;backface-visibility:hidden !important;",
+      " background:radial-gradient(ellipse at 50% 42%,#def5ef 0%,#c7e6dd 72%,#9dc3b8 100%) !important;",
+      " border-radius:2px !important;box-shadow:inset 0 2px 8px rgba(0,0,0,.45) !important;}",
+      "#" + KENNUNG3 + " .p3-meter-licht{position:absolute !important;inset:0 !important;pointer-events:none !important;}",
       "#" + KENNUNG3 + " .p3-meter svg{position:relative !important;z-index:2 !important;width:100% !important;height:100% !important;display:block !important;}",
       "#" + KENNUNG3 + " .p3-meter::after{content:'' !important;position:absolute !important;inset:0 !important;z-index:3 !important;pointer-events:none !important;",
       " background:linear-gradient(135deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,.04) 36%,transparent 40%) !important;}",
@@ -4565,13 +4592,11 @@
       "#" + KENNUNG3 + " .p3-taste{position:absolute !important;z-index:6 !important;border-radius:3px !important;",
       " background:transparent !important;border:none !important;padding:0 !important;cursor:pointer !important;",
       " display:flex !important;flex-direction:column !important;align-items:center !important;justify-content:center !important;",
-      " backdrop-filter:var(--p3-licht-filter,hue-rotate(0deg)) !important;-webkit-backdrop-filter:var(--p3-licht-filter,hue-rotate(0deg)) !important;",
+      " backdrop-filter:var(--p3-licht-filter,none) !important;-webkit-backdrop-filter:var(--p3-licht-filter,none) !important;",
       " color:#e8f4ee !important;font:800 calc(8.5px * var(--p3-skala,1))/1.05 system-ui !important;letter-spacing:.06em !important;",
-      " text-shadow:0 1px 2px #000,0 0 6px rgba(0,0,0,.9) !important;transition:filter .09s !important;}",
-      "#" + KENNUNG3 + " .p3-taste:hover{filter:brightness(1.25) !important;",
-      " backdrop-filter:var(--p3-licht-filter,hue-rotate(0deg)) brightness(1.2) !important;-webkit-backdrop-filter:var(--p3-licht-filter,hue-rotate(0deg)) brightness(1.2) !important;}",
-      "#" + KENNUNG3 + " .p3-taste:active{transform:translateY(1px) !important;filter:brightness(1.45) !important;",
-      " backdrop-filter:var(--p3-licht-filter,hue-rotate(0deg)) brightness(1.38) !important;-webkit-backdrop-filter:var(--p3-licht-filter,hue-rotate(0deg)) brightness(1.38) !important;}",
+      " text-shadow:0 1px 2px #000,0 0 6px rgba(0,0,0,.9) !important;transition:filter .09s,background .09s !important;}",
+      "#" + KENNUNG3 + " .p3-taste:hover{filter:brightness(1.25) !important;background:rgba(255,255,255,.09) !important;}",
+      "#" + KENNUNG3 + " .p3-taste:active{transform:translateY(1px) !important;filter:brightness(1.45) !important;background:rgba(255,255,255,.17) !important;}",
       "#" + KENNUNG3 + " .p3-taste.an{box-shadow:inset 0 0 0 1.4px rgba(135,255,180,.92),inset 0 0 10px rgba(45,235,120,.38) !important;",
       " color:#ffffff !important;text-shadow:0 0 8px rgba(85,255,155,.9),0 1px 2px #000 !important;}",
       "#" + KENNUNG3 + ".standby .p3-halo,#" + KENNUNG3 + ".standby .p3-taste{",
@@ -4592,7 +4617,7 @@
       " touch-action:none !important;cursor:" + HAND_AUF3 + " !important;}",
       "#" + KENNUNG3 + " .p3-dreh-cv.greift{cursor:" + HAND_ZU3 + " !important;}",
       "#" + KENNUNG3 + " .p3-halo{position:absolute !important;border-radius:50% !important;pointer-events:none !important;z-index:3 !important;",
-      " backdrop-filter:var(--p3-licht-filter,hue-rotate(0deg)) !important;-webkit-backdrop-filter:var(--p3-licht-filter,hue-rotate(0deg)) !important;}",
+      " backdrop-filter:var(--p3-licht-filter,none) !important;-webkit-backdrop-filter:var(--p3-licht-filter,none) !important;}",
       /* Gehaeuse-Beschriftung */
       "#" + KENNUNG3 + " .p3-lbl{position:absolute !important;z-index:5 !important;pointer-events:none !important;text-align:center !important;",
       " font:700 calc(7.4px * var(--p3-skala,1))/1 system-ui !important;letter-spacing:.09em !important;",
@@ -5450,15 +5475,15 @@
     if (z.meldung && Date.now() - (z.meldungZeit || 0) < 4000) {
       st = z.meldung;
     }
-    if (el.p3Status) el.p3Status.textContent = st;
+    txtSetzen(el.p3Status, st);
 
     try {
       var sV = w.querySelector('[data-m="vol"]'), sS = w.querySelector('[data-m="sq"]'),
           sR = w.querySelector('[data-m="rf"]'),  sT = w.querySelector('[data-m="schw"]');
-      if (sV && document.activeElement !== sV) { sV.value = z.laut; el.p3MVol.textContent = z.laut; }
-      if (sS && document.activeElement !== sS) { sS.value = z.sq;   el.p3MSq.textContent = z.sq; }
-      if (sR && document.activeElement !== sR) { sR.value = z.rf;   el.p3MRf.textContent = (RF_STATE.modus === "auto" ? "AGC" : z.rf); }
-      if (sT && document.activeElement !== sT) { sT.value = z.schw; el.p3MSchw.textContent = "+" + z.schw; }
+      if (sV && document.activeElement !== sV) { if (String(sV.value) !== String(z.laut)) sV.value = z.laut; txtSetzen(el.p3MVol, z.laut); }
+      if (sS && document.activeElement !== sS) { if (String(sS.value) !== String(z.sq)) sS.value = z.sq; txtSetzen(el.p3MSq, z.sq); }
+      if (sR && document.activeElement !== sR) { if (String(sR.value) !== String(z.rf)) sR.value = z.rf; txtSetzen(el.p3MRf, RF_STATE.modus === "auto" ? "AGC" : z.rf); }
+      if (sT && document.activeElement !== sT) { if (String(sT.value) !== String(z.schw)) sT.value = z.schw; txtSetzen(el.p3MSchw, "+" + z.schw); }
     } catch (eM) { }
   }
 

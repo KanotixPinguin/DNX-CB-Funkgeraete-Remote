@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =====================================================================
-#  DNX CB-Funkgeraete Remote  v1.1.0  -  Installer / Updater / Entferner
+#  DNX CB-Funkgeraete Remote  v1.1.1  -  Installer / Updater / Entferner
 # ---------------------------------------------------------------------
 #  Enthaelt alle 3 markenfreien CB-Funkgeraete inklusive Frontplatten:
 #    - dnx_george2.js
@@ -169,7 +169,7 @@ frage_typ_und_ziel() {
   else
     echo ""
     echo "====================================================================="
-    echo "  DNX CB-Funkgeraete Remote (v1.1.0) – Einrichtung ($CMD)"
+    echo "  DNX CB-Funkgeraete Remote (v1.1.1) – Einrichtung ($CMD)"
     echo "  Enthaelt 3 CB-Funkgeraete inklusive Frontplatten-Bilder"
     echo "====================================================================="
     echo ""

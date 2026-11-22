@@ -1,4 +1,4 @@
-# DNX CB-Funkgeräte Remote (`v1.1.0`)
+# DNX CB-Funkgeräte Remote (`v1.1.1`)
 
 <!-- DNX-DISCLAIMER-START -->
 > **Wichtiger Hinweis / Vollständige Distanzierung (Hobby-Mod-Mode)**
@@ -18,6 +18,14 @@
 
 Drei voll bedienbare, markenfreie CB-Funkgeräte als schwebende Fernsteuerung direkt über dem OpenWebRX- / OpenWebRX+-Empfänger — **komplett mit allen hochauflösenden Frontplatten-Grafiken** in einem fertigen Paket.
 
+## Neu in v1.1.1 (`dnx_george2.js v9.13`)
+
+- **Compositor- & S-Meter-Anti-Blink-Fix über WebGL2-/3D-Hintergründen:**
+  - Alle drei Geräte-Chassis (`> img`) sowie `.ae8-meter`, `.g2-lcd`, `.ae-display` und `.p3-meter` sind per `isolation: isolate; contain: layout paint style; transform: translateZ(0); backface-visibility: hidden` als eigene GPU-Layer isoliert (`transition: filter` entfernt, `.g2-seg`/`.ae-seg` auf `box-shadow`).
+  - Opake Basisfarben auf `.ae8-meter` (`rgb(233, 205, 157)`) und `.p3-meter` (`#def5ef -> #c7e6dd -> #9dc3b8`) verhindern ein Durchscheinen des 3D-Wasserfall-Hintergrunds (`#dnx3d-wrap`/`#dnx3d-canvas`) bei Pegelschwankungen.
+  - `P3_LICHT_FILTER.gruen` auf `"none"` gesetzt (`0` teure `BackdropFilter`-Passes im Standardmodus; alle wählbaren Tasten-Farbmodi bleiben aktiv).
+  - `0.1°`-Winkel-Cache für S-Meter-Nadeln sowie Dirty-Checks für Text-Updates eliminieren unnötige DOM-Mutationen im Ruhezustand.
+
 ## Neu in v1.1.0 (`dnx_george2.js v9.12`)
 
 - **Alle 3 Geräte gehärtet & pixelgenau bedienbar:**
@@ -30,7 +38,7 @@ Drei voll bedienbare, markenfreie CB-Funkgeräte als schwebende Fernsteuerung di
 ## Inhalt des Pakets
 
 - `install.sh` — interaktiver Installer für **normale OpenWebRX-Installationen** und **Docker-Images / Docker-Container** (Bind-Mount & `docker cp`)
-- `files/dnx_george2.js` — komplettes JavaScript-Modul (`v9.12`, ohne externe Abhängigkeiten)
+- `files/dnx_george2.js` — komplettes JavaScript-Modul (`v9.13`, ohne externe Abhängigkeiten)
 - `files/funkgeraet1_ae8000.png` — Frontplatte Funkgerät 1 (Wurzelholz-Heimstation mit Doppel-Analog-Meter)
 - `files/funkgeraet2_xf9082.png` — Frontplatte Funkgerät 2 (schwarze SSB-Heimstation mit Panorama-LCD)
 - `files/funkgeraet3_111.png` — Frontplatte Funkgerät 3 (kompakte CB-Heimstation)
@@ -46,7 +54,7 @@ Drei voll bedienbare, markenfreie CB-Funkgeräte als schwebende Fernsteuerung di
 ## Installation
 
 ```bash
-unzip DNX-CB-Funkgeraete-Remote-v1.1.0.zip
+unzip DNX-CB-Funkgeraete-Remote-v1.1.1.zip
 cd DNX-CB-Funkgeraete-Remote
 chmod +x install.sh
 sudo ./install.sh
