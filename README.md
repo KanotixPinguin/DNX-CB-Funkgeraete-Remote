@@ -75,3 +75,12 @@ sudo ./install.sh uninstall
 **DE:** Private, inoffizielle Hobby-Anpassung (Mod-Mode) für OpenWebRX / OpenWebRX+. Kein offizielles OpenWebRX- oder OpenWebRX+-Projekt, keine Verbindung zu oder Unterstützung durch die jeweiligen Entwickler. Nutzung erfolgt vollständig auf eigene Gefahr; soweit gesetzlich zulässig wird jede Haftung ausgeschlossen. Vor dem Einspielen bitte Sicherungen anlegen.
 
 **EN:** Private, unofficial hobby modification (Mod-Mode) for OpenWebRX / OpenWebRX+. Not an official OpenWebRX or OpenWebRX+ project; no affiliation with or support from its maintainers. Use entirely at your own risk; to the extent permitted by law, no liability is accepted. Always create backups before installing.
+
+---
+
+## Verbindungen im DNX-Ökosystem
+
+![DNX Gesamtarchitektur & Verbindungen](docs/dnx-architektur-verbindungen.png)
+
+* **Verbindung zu `DNX-Styler` (`TOOL_DEFS` & `styler_share.py`):** Im Styler-Block `#dnx-blk-tools` (`Werkzeuge an / aus`) schalten die Einträge `Funkgerät 1–3` (`t_funkgeraet1`, `t_funkgeraet2`, `t_funkgeraet3`) das virtuelle Funkgerät-Overlay um; Zustände werden lokal über `dnx_ae6290_offen` / `dnx_profi95_offen` gemerkt.
+* **Verbindung zu `DNX-Receiver-Account-Control`:** Über `:8095/api/me` greifen `tune` und `other_tools` für den Abstimm- und Bedienzugriff pro Benutzerrolle.
